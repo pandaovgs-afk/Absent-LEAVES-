@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Lists</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0b0b0b;
+    --panel: #141414;
+    --panel-2: #1a1a1a;
+    --line: #2a2a2a;
+    --gold-1: #e2c07a;
+    --gold-2: #c9a24b;
+    --text: #f2f0ea;
+    --text-dim: #8f8f8f;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 36px 20px 60px;
+  }
+
+  .container { max-width: 780px; margin: 0 auto; }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 18px;
+    margin-bottom: 28px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .wordmark {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 1.7rem;
+    letter-spacing: 1px;
+    background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .page-title {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 1.9rem;
+    letter-spacing: -0.5px;
+    margin-top: 4px;
+  }
+
+  .date {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    letter-spacing: 0.3px;
+  }
+
+  .grid { display: grid; gap: 26px; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+  .card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px;
+  }
+
+  .card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .card h2 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+
+  .count-pill {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--bg);
+    background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+    padding: 3px 10px;
+    border-radius: 20px;
+    min-width: 22px;
+    text-align: center;
+  }
+
+  ul.list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+  .list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 10px 10px 10px 14px;
+  }
+
+  .list input[type="checkbox"] {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border: 1.5px solid var(--text-dim);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    display: grid;
+    place-content: center;
+  }
+
+  .list input[type="checkbox"]::before {
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+    transform: scale(0);
+    transition: transform 0.12s ease;
+  }
+
+  .list input[type="checkbox"]:checked::before { transform: scale(1); }
+
+  .item-text {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    padding: 2px 0;
+  }
+
+  .list input[type="checkbox"]:checked ~ .item-text {
+    text-decoration: line-through;
+    color: var(--text-dim);
+  }
+
+  .del-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: color 0.15s ease, background 0.15s ease;
+  }
+
+  .del-btn:hover { color: #e0574a; background: rgba(224,87,74,0.1); }
+
+  .empty-msg {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    padding: 14px 0;
+    text-align: center;
+    font-style: italic;
+  }
+
+  .add-row { display: flex; gap: 8px; }
+
+  .add-row input[type="text"] {
+    flex: 1;
+    padding: 11px 14px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--panel-2);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+  }
+
+  .add-row input[type="text"]:focus { border-color: var(--gold-2); }
+  .add-row input[type="text"]::placeholder { color: var(--text-dim); }
+
+  .add-btn {
+    border: none;
+    border-radius: 5px;
+    padding: 0 20px;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--gold-1), var(--gold-2));
+    color: #1a1405;
+    cursor: pointer;
+    transition: filter 0.15s ease;
+  }
+
+  .add-btn:hover { filter: brightness(1.1); }
+
+  .clear-done {
+    display: block;
+    margin-top: 12px;
+    background: transparent;
+    border: none;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    letter-spacing: 0.3px;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .clear-done:hover { color: var(--gold-1); }
+
+  footer {
+    text-align: center;
+    margin-top: 34px;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div>
+      <div class="wordmark">LISTS</div>
+      <div class="page-title">Shopping &amp; To-Do</div>
+    </div>
+    <div class="date" id="todayDate"></div>
+  </header>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-head">
+        <h2>Shopping List</h2>
+        <div class="count-pill" id="shoppingCount">0</div>
+      </div>
+      <ul class="list" id="shoppingList"></ul>
+      <div class="empty-msg" id="shoppingEmpty" style="display:none;">list is empty</div>
+      <div class="add-row">
+        <input type="text" id="shoppingInput" placeholder="add an item...">
+        <button class="add-btn" onclick="addItem('shoppingList')">Add</button>
+      </div>
+      <button class="clear-done" onclick="clearChecked('shoppingList')">clear checked items</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head">
+        <h2>To-Do List</h2>
+        <div class="count-pill" id="todoCount">0</div>
+      </div>
+      <ul class="list" id="todoList"></ul>
+      <div class="empty-msg" id="todoEmpty" style="display:none;">list is empty</div>
+      <div class="add-row">
+        <input type="text" id="todoInput" placeholder="add a task...">
+        <button class="add-btn" onclick="addItem('todoList')">Add</button>
+      </div>
+      <button class="clear-done" onclick="clearChecked('todoList')">clear checked items</button>
+    </div>
+
+  </div>
+
+  <footer>tap to check off · click text to edit · × to remove</footer>
+</div>
+
+<script>
+  document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+
+  function makeItem(containerId, text, checked) {
+    const ul = document.getElementById(containerId);
+    const li = document.createElement('li');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = !!checked;
+    cb.addEventListener('change', () => updateCount(containerId));
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'item-text';
+    input.value = text;
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') input.blur();
+    });
+
+    const del = document.createElement('button');
+    del.className = 'del-btn';
+    del.textContent = '×';
+    del.addEventListener('click', () => {
+      li.remove();
+      updateCount(containerId);
+    });
+
+    li.appendChild(cb);
+    li.appendChild(input);
+    li.appendChild(del);
+    ul.appendChild(li);
+    updateCount(containerId);
+    return li;
+  }
+
+  function addItem(containerId) {
+    const inputId = containerId === 'shoppingList' ? 'shoppingInput' : 'todoInput';
+    const input = document.getElementById(inputId);
+    const value = input.value.trim();
+    if (!value) return;
+    makeItem(containerId, value, false);
+    input.value = '';
+    input.focus();
+  }
+
+  ['shoppingInput', 'todoInput'].forEach(id => {
+    document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const target = id === 'shoppingInput' ? 'shoppingList' : 'todoList';
+        addItem(target);
+      }
+    });
+  });
+
+  function updateCount(containerId) {
+    const ul = document.getElementById(containerId);
+    const items = ul.querySelectorAll('li');
+    const remaining = ul.querySelectorAll('li input[type="checkbox"]:not(:checked)').length;
+    const countId = containerId === 'shoppingList' ? 'shoppingCount' : 'todoCount';
+    const emptyId = containerId === 'shoppingList' ? 'shoppingEmpty' : 'todoEmpty';
+    document.getElementById(countId).textContent = remaining;
+    document.getElementById(emptyId).style.display = items.length === 0 ? 'block' : 'none';
+  }
+
+  function clearChecked(containerId) {
+    const ul = document.getElementById(containerId);
+    ul.querySelectorAll('li').forEach(li => {
+      if (li.querySelector('input[type="checkbox"]').checked) li.remove();
+    });
+    updateCount(containerId);
+  }
+
+  // starter items
+  ['Protein powder', 'Eggs', 'Rice', 'Chicken breast', 'Black coffee'].forEach(t => makeItem('shoppingList', t, false));
+  ['Morning workout', 'Deep work block', 'Read 20 pages', 'Plan tomorrow'].forEach(t => makeItem('todoList', t, false));
+</script>
+</body>
+</html>
