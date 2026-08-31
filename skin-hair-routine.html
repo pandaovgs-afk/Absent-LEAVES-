@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skin & Hair Routine</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23EEF5EC'/%3E%3Ccircle cx='32' cy='20' r='9' fill='%23EEAB3C'/%3E%3Ccircle cx='44' cy='32' r='9' fill='%23D9637A'/%3E%3Ccircle cx='32' cy='44' r='9' fill='%236C8798'/%3E%3Ccircle cx='20' cy='32' r='9' fill='%23C98552'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%233D7D5E'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23EEF5EC'/%3E%3Ccircle cx='32' cy='20' r='9' fill='%23EEAB3C'/%3E%3Ccircle cx='44' cy='32' r='9' fill='%23D9637A'/%3E%3Ccircle cx='32' cy='44' r='9' fill='%236C8798'/%3E%3Ccircle cx='20' cy='32' r='9' fill='%23C98552'/%3E%3Ccircle cx='32' cy='32' r='10' fill='%233D7D5E'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#EEF5EC;
+    --surface:#FFFFFF;
+    --surface-soft:#E1EEE0;
+    --ink:#1D2B21;
+    --ink-soft:#5A6C5E;
+    --line:#D2E1CE;
+
+    --am:#3D7D5E;
+    --am-soft:#DCEEE2;
+    --am-deep:#2C5C45;
+
+    --active:#D9637A;
+    --active-soft:#F8E1E6;
+    --active-deep:#A83F57;
+
+    --rest:#6C8798;
+    --rest-soft:#E2EAEE;
+    --rest-deep:#48606F;
+
+    --sun:#EEAB3C;
+    --sun-deep:#8A5B12;
+
+    --hair:#C98552;
+    --hair-soft:#F3E3D1;
+    --hair-deep:#8C5A2E;
+
+    --font-display:'Fraunces', serif;
+    --font-body:'Inter', sans-serif;
+    --font-mono:'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px 64px;
+  }
+
+  .app{
+    width:100%;
+    max-width:480px;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    text-align:center;
+    margin-bottom:22px;
+  }
+
+  .eyebrow{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.18em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 6px;
+  }
+
+  .date{
+    font-family:var(--font-display);
+    font-weight:600;
+    font-size:40px;
+    line-height:1.05;
+    margin:0 0 12px;
+    letter-spacing:-0.01em;
+  }
+
+  .date-num{ font-style:italic; font-weight:500; color:var(--am-deep); }
+
+  .badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    letter-spacing:0.02em;
+    padding:6px 14px;
+    border-radius:999px;
+    font-weight:500;
+  }
+
+  .badge.is-active{ background:var(--active-soft); color:var(--active-deep); }
+  .badge.is-rest{ background:var(--rest-soft); color:var(--rest-deep); }
+  .badge.is-hair{ background:var(--hair-soft); color:var(--hair-deep); }
+
+  .badge-inline{
+    margin-left:auto;
+    font-size:10.5px;
+    padding:4px 10px;
+  }
+
+  /* ---------- Glow bar ---------- */
+  .glow-wrap{ margin-bottom:26px; }
+
+  .glow-track{
+    position:relative;
+    height:10px;
+    border-radius:999px;
+    background:var(--surface-soft);
+    overflow:hidden;
+    border:1px solid var(--line);
+  }
+
+  .glow-fill{
+    height:100%;
+    width:0%;
+    border-radius:999px;
+    background:linear-gradient(90deg, var(--am), var(--sun) 45%, var(--hair) 70%, var(--active));
+    transition:width 0.45s cubic-bezier(.4,0,.2,1);
+    position:relative;
+  }
+
+  .glow-fill::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(110deg, transparent 20%, rgba(255,255,255,0.55) 40%, transparent 60%);
+    background-size:200% 100%;
+    animation:shimmer 2.6s ease-in-out infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .glow-fill::after{ animation:none; }
+  }
+
+  @keyframes shimmer{
+    0%{ background-position:180% 0; }
+    100%{ background-position:-40% 0; }
+  }
+
+  .glow-label{
+    margin:8px 0 0;
+    font-size:13px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  .glow-label span{ font-family:var(--font-mono); color:var(--ink); font-weight:500; }
+
+  /* ---------- Routine cards ---------- */
+  .routine-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:18px 18px 8px;
+    margin-bottom:14px;
+    transition:box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  .routine-card.current{
+    border-color:var(--am);
+    box-shadow:0 0 0 3px var(--am-soft);
+  }
+
+  .routine-card[data-period="pm"].current{
+    border-color:var(--rest);
+    box-shadow:0 0 0 3px var(--rest-soft);
+  }
+
+  .card-head{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:6px;
+  }
+
+  .card-head h2{
+    font-family:var(--font-display);
+    font-size:19px;
+    font-weight:600;
+    margin:0;
+  }
+
+  .card-icon{
+    font-size:15px;
+    width:26px; height:26px;
+    display:flex; align-items:center; justify-content:center;
+    border-radius:50%;
+    background:var(--am-soft);
+    color:var(--am-deep);
+    flex:0 0 auto;
+  }
+
+  #pmCard .card-icon{ background:var(--rest-soft); color:var(--rest-deep); }
+  #hairCard .card-icon{ background:var(--hair-soft); color:var(--hair-deep); }
+
+  .steps{ list-style:none; margin:0; padding:0; }
+
+  .step{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 2px;
+    border-top:1px solid var(--line);
+  }
+
+  .step:first-child{ border-top:none; }
+
+  .check{
+    flex:0 0 auto;
+    width:26px; height:26px;
+    border-radius:8px;
+    border:1.5px solid var(--line);
+    background:var(--surface);
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    padding:0;
+    transition:background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  }
+
+  .check:active{ transform:scale(0.92); }
+
+  .check .check-mark{
+    opacity:0;
+    color:#fff;
+    font-size:14px;
+    transform:scale(0.6);
+    transition:opacity 0.15s ease, transform 0.15s ease;
+  }
+
+  .step.done .check{ background:var(--am); border-color:var(--am); }
+  .step.done .check .check-mark{ opacity:1; transform:scale(1); }
+  #pmCard .step.done .check{ background:var(--rest); border-color:var(--rest); }
+  #hairCard .step.done .check{ background:var(--hair); border-color:var(--hair); }
+
+  .step-text{ min-width:0; }
+
+  .step-title{
+    margin:0;
+    font-size:15px;
+    font-weight:600;
+    transition:color 0.2s ease;
+  }
+
+  .step-sub{
+    margin:2px 0 0;
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+
+  .step.done .step-title{ color:var(--ink-soft); text-decoration:line-through; text-decoration-color:var(--line); }
+
+  /* ---------- Week strip ---------- */
+  .week{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:16px 18px 18px;
+    margin-bottom:14px;
+  }
+
+  .week-label{
+    font-family:var(--font-mono);
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 12px;
+  }
+
+  .week-strip{
+    display:flex;
+    justify-content:space-between;
+  }
+
+  .week-day{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:7px;
+    font-family:var(--font-mono);
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+
+  .week-dot{
+    width:26px; height:26px;
+    border-radius:50%;
+    background:var(--surface-soft);
+    position:relative;
+    overflow:hidden;
+    border:1.5px solid var(--line);
+  }
+
+  .week-dot.is-today{ border-color:var(--am); }
+
+  .week-dot-fill{
+    position:absolute; left:0; right:0; bottom:0;
+    background:var(--am);
+    height:0%;
+    transition:height 0.3s ease;
+  }
+
+  .week-day.is-bha .week-dot-fill{ background:var(--active); }
+
+  /* ---------- Footer ---------- */
+  .foot{
+    padding:0 6px;
+    text-align:center;
+  }
+
+  .foot p{
+    margin:0 0 6px;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    line-height:1.5;
+  }
+
+  .foot strong{ color:var(--ink); }
+
+  .foot .tip{
+    font-style:italic;
+    font-family:var(--font-display);
+    font-size:14px;
+    color:var(--ink);
+    margin-top:10px;
+  }
+
+  button:focus-visible, .check:focus-visible{
+    outline:2px solid var(--am-deep);
+    outline-offset:2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="hero">
+    <p class="eyebrow">Today</p>
+    <h1 class="date" id="dateHeading">&nbsp;</h1>
+    <span class="badge" id="dayBadge"></span>
+  </div>
+
+  <div class="glow-wrap">
+    <div class="glow-track"><div class="glow-fill" id="glowFill"></div></div>
+    <p class="glow-label"><span id="doneCount">0</span> of <span id="totalCount">5</span> steps done today</p>
+  </div>
+
+  <section class="routine-card" id="amCard" data-period="am">
+    <div class="card-head">
+      <span class="card-icon">☀</span>
+      <h2>Morning</h2>
+    </div>
+    <ul class="steps" id="amSteps"></ul>
+  </section>
+
+  <section class="routine-card" id="pmCard" data-period="pm">
+    <div class="card-head">
+      <span class="card-icon">☾</span>
+      <h2>Evening</h2>
+    </div>
+    <ul class="steps" id="pmSteps"></ul>
+  </section>
+
+  <section class="routine-card" id="hairCard" data-period="hair">
+    <div class="card-head">
+      <span class="card-icon">✦</span>
+      <h2>Hair</h2>
+      <span class="badge badge-inline" id="hairBadge"></span>
+    </div>
+    <ul class="steps" id="hairSteps"></ul>
+  </section>
+
+  <section class="week">
+    <p class="week-label">This week</p>
+    <div class="week-strip" id="weekStrip"></div>
+  </section>
+
+  <footer class="foot">
+    <p><strong>BHA nights:</strong> Mon · Wed · Fri. <strong>Wash days:</strong> Thu · Sun (detox on Sun).</p>
+    <p class="tip" id="tipText"></p>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  const amSteps = [
+    { title:'Cleanse', sub:'Arencia Rice Mochi or Dove Men+Care' },
+    { title:'Moisturize', sub:'Foxtale Oil Balancing (niacinamide + azelaic acid)' },
+    { title:'Protect', sub:'Derma Co sunscreen — every morning, no skipping' }
+  ];
+
+  function pmStepsFor(type){
+    if(type === 'active'){
+      return [
+        { title:'Cleanse', sub:'Minimalist 2% Salicylic Acid wash' },
+        { title:'Moisturize', sub:'Foxtale Oil Balancing' }
+      ];
+    }
+    return [
+      { title:'Cleanse', sub:'Arencia Rice Mochi or Dove Men+Care' },
+      { title:'Moisturize', sub:'Foxtale Oil Balancing' }
+    ];
+  }
+
+  function hairStepsFor(type, isDetoxDay){
+    if(type === 'wash'){
+      const steps = [];
+      if(isDetoxDay){
+        steps.push({ title:'Detox pre-wash', sub:'Dry scalp, section hair, massage in before shampoo' });
+      }
+      steps.push({ title:'Shampoo', sub:'Scalp Reviving Shampoo — focus on scalp' });
+      steps.push({ title:'Condition', sub:'Moisture Restoring Conditioner — mid-lengths & ends only' });
+      steps.push({ title:'Shine serum (optional)', sub:'2–3 drops on damp ends, keep off scalp' });
+      return steps;
+    }
+    return [
+      { title:'Shine touch-up (optional)', sub:'A couple drops of serum on dry ends if hair looks dull' }
+    ];
+  }
+
+  const TIPS = [
+    'Sunscreen is non-negotiable — it protects skin while the actives do their work.',
+    'Bumps take 4–6 weeks to clear. Consistency beats intensity here.',
+    'If skin feels tight or red, skip a BHA night — rest days matter too.',
+    'Change your pillowcase weekly — oil and product build up fast.',
+    'Never pick at bumps — it slows healing and risks scarring.',
+    'Moisturizer isn\u2019t optional for oily skin — skipping it backfires.',
+    'Apply sunscreen as the very last step, after moisturizer.',
+    'Keep silicone serum off your scalp — it can interfere with the dandruff actives.',
+    'Detox pre-wash goes on a dry scalp, before shampoo — not after.'
+  ];
+
+  function pad(n){ return n < 10 ? '0' + n : '' + n; }
+  function dateKey(d){ return 'routine:' + d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+  function skinDayType(d){ const dow = d.getDay(); return (dow === 1 || dow === 3 || dow === 5) ? 'active' : 'rest'; }
+  function hairDayType(d){ const dow = d.getDay(); return (dow === 4 || dow === 0) ? 'wash' : 'rest'; }
+  function isHairDetoxDay(d){ return d.getDay() === 0; }
+  function isSameDate(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
+  function mondayOf(d){
+    const copy = new Date(d);
+    const dow = copy.getDay();
+    const diff = (dow === 0) ? -6 : 1 - dow;
+    copy.setDate(copy.getDate() + diff);
+    copy.setHours(0,0,0,0);
+    return copy;
+  }
+
+  const today = new Date();
+  const todayKey = dateKey(today);
+  const skinType = skinDayType(today);
+  const hairType = hairDayType(today);
+  const detoxToday = isHairDetoxDay(today);
+
+  const pmSteps = pmStepsFor(skinType);
+  const hairSteps = hairStepsFor(hairType, detoxToday);
+  const totalSteps = amSteps.length + pmSteps.length + hairSteps.length;
+
+  document.getElementById('dateHeading').innerHTML =
+    DAY_NAMES[today.getDay()] + ' <span class="date-num">' + today.getDate() + '</span> ' + MONTH_NAMES[today.getMonth()];
+
+  const badge = document.getElementById('dayBadge');
+  if(skinType === 'active'){
+    badge.textContent = 'Active night · BHA';
+    badge.classList.add('is-active');
+  } else {
+    badge.textContent = 'Rest night';
+    badge.classList.add('is-rest');
+  }
+
+  const hairBadge = document.getElementById('hairBadge');
+  if(hairType === 'wash'){
+    hairBadge.textContent = detoxToday ? 'Wash + detox' : 'Wash day';
+  } else {
+    hairBadge.textContent = 'Rest day';
+  }
+  hairBadge.classList.add('is-hair');
+
+  document.getElementById('totalCount').textContent = totalSteps;
+  document.getElementById('tipText').textContent = TIPS[today.getDate() % TIPS.length];
+
+  const hour = today.getHours();
+  document.getElementById(hour < 16 ? 'amCard' : 'pmCard').classList.add('current');
+
+  let state = { am: amSteps.map(()=>false), pm: pmSteps.map(()=>false), hair: hairSteps.map(()=>false) };
+
+  function renderSteps(listEl, steps, checked, period){
+    listEl.innerHTML = '';
+    steps.forEach((step, i) => {
+      const li = document.createElement('li');
+      li.className = 'step' + (checked[i] ? ' done' : '');
+      li.innerHTML =
+        '<button class="check" aria-pressed="' + (checked[i] ? 'true' : 'false') + '" aria-label="Mark ' + step.title + ' done">' +
+          '<span class="check-mark">\u2713</span>' +
+        '</button>' +
+        '<div class="step-text">' +
+          '<p class="step-title">' + step.title + '</p>' +
+          '<p class="step-sub">' + step.sub + '</p>' +
+        '</div>';
+      li.querySelector('.check').addEventListener('click', () => toggleStep(period, i));
+      listEl.appendChild(li);
+    });
+  }
+
+  function idFor(period){
+    if(period === 'am') return 'amSteps';
+    if(period === 'pm') return 'pmSteps';
+    return 'hairSteps';
+  }
+
+  function stepsFor(period){
+    if(period === 'am') return amSteps;
+    if(period === 'pm') return pmSteps;
+    return hairSteps;
+  }
+
+  function updateGlow(){
+    const done = state.am.filter(Boolean).length + state.pm.filter(Boolean).length + state.hair.filter(Boolean).length;
+    document.getElementById('doneCount').textContent = done;
+    document.getElementById('glowFill').style.width = (totalSteps ? (done/totalSteps*100) : 0) + '%';
+    return done;
+  }
+
+  async function saveState(){
+    try{
+      await window.storage.set(todayKey, JSON.stringify(state), false);
+    }catch(e){ /* storage best-effort */ }
+    renderWeekStrip();
+  }
+
+  function toggleStep(period, index){
+    state[period][index] = !state[period][index];
+    renderSteps(document.getElementById(idFor(period)), stepsFor(period), state[period], period);
+    updateGlow();
+    saveState();
+  }
+
+  async function loadState(){
+    try{
+      const res = await window.storage.get(todayKey);
+      if(res && res.value){
+        const parsed = JSON.parse(res.value);
+        if(parsed && Array.isArray(parsed.am) && Array.isArray(parsed.pm)){
+          state.am = parsed.am;
+          state.pm = parsed.pm;
+          state.hair = Array.isArray(parsed.hair) ? parsed.hair : state.hair;
+        }
+      }
+    }catch(e){ /* no saved state yet */ }
+    renderSteps(document.getElementById('amSteps'), amSteps, state.am, 'am');
+    renderSteps(document.getElementById('pmSteps'), pmSteps, state.pm, 'pm');
+    renderSteps(document.getElementById('hairSteps'), hairSteps, state.hair, 'hair');
+    updateGlow();
+  }
+
+  async function renderWeekStrip(){
+    const strip = document.getElementById('weekStrip');
+    strip.innerHTML = '';
+    const monday = mondayOf(today);
+
+    for(let i = 0; i < 7; i++){
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      const type = skinDayType(d);
+      const key = dateKey(d);
+
+      let fraction = 0;
+      if(isSameDate(d, today)){
+        const dTotal = totalSteps;
+        const dDone = state.am.filter(Boolean).length + state.pm.filter(Boolean).length + state.hair.filter(Boolean).length;
+        fraction = dTotal ? dDone / dTotal : 0;
+      } else {
+        try{
+          const res = await window.storage.get(key);
+          if(res && res.value){
+            const parsed = JSON.parse(res.value);
+            const hairArr = Array.isArray(parsed.hair) ? parsed.hair : [];
+            const dTotal = (parsed.am ? parsed.am.length : 0) + (parsed.pm ? parsed.pm.length : 0) + hairArr.length;
+            const dDone = (parsed.am ? parsed.am.filter(Boolean).length : 0) + (parsed.pm ? parsed.pm.filter(Boolean).length : 0) + hairArr.filter(Boolean).length;
+            fraction = dTotal ? dDone / dTotal : 0;
+          }
+        }catch(e){ fraction = 0; }
+      }
+
+      const wrap = document.createElement('div');
+      wrap.className = 'week-day' + (type === 'active' ? ' is-bha' : '');
+      wrap.innerHTML =
+        '<div class="week-dot' + (isSameDate(d, today) ? ' is-today' : '') + '">' +
+          '<div class="week-dot-fill" style="height:' + Math.round(fraction*100) + '%"></div>' +
+        '</div>' +
+        '<span>' + DAY_NAMES[d.getDay()] + '</span>';
+      strip.appendChild(wrap);
+    }
+  }
+
+  loadState().then(renderWeekStrip);
+})();
+</script>
+
+</body>
+</html>
