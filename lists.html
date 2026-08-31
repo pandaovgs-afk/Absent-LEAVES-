@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+=<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -322,13 +322,43 @@
 <script>
   document.getElementById('todayDate').textContent = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
 
+  const STORAGE_KEY = 'lists_app_data_v1';
+
+  function saveData() {
+    const data = { shoppingList: [], todoList: [] };
+    ['shoppingList', 'todoList'].forEach(containerId => {
+      document.querySelectorAll('#' + containerId + ' li').forEach(li => {
+        data[containerId].push({
+          text: li.querySelector('.item-text').value,
+          checked: li.querySelector('input[type="checkbox"]').checked
+        });
+      });
+    });
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.warn('Could not save:', e);
+    }
+  }
+
+  function loadData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return null;
+      return JSON.parse(raw);
+    } catch (e) {
+      console.warn('Could not load saved data:', e);
+      return null;
+    }
+  }
+
   function makeItem(containerId, text, checked) {
     const ul = document.getElementById(containerId);
     const li = document.createElement('li');
     const cb = document.createElement('input');
     cb.type = 'checkbox';
     cb.checked = !!checked;
-    cb.addEventListener('change', () => updateCount(containerId));
+    cb.addEventListener('change', () => { updateCount(containerId); saveData(); });
 
     const input = document.createElement('input');
     input.type = 'text';
@@ -337,6 +367,7 @@
     input.addEventListener('keydown', e => {
       if (e.key === 'Enter') input.blur();
     });
+    input.addEventListener('blur', saveData);
 
     const del = document.createElement('button');
     del.className = 'del-btn';
@@ -344,6 +375,7 @@
     del.addEventListener('click', () => {
       li.remove();
       updateCount(containerId);
+      saveData();
     });
 
     li.appendChild(cb);
@@ -362,6 +394,7 @@
     makeItem(containerId, value, false);
     input.value = '';
     input.focus();
+    saveData();
   }
 
   ['shoppingInput', 'todoInput'].forEach(id => {
@@ -389,11 +422,19 @@
       if (li.querySelector('input[type="checkbox"]').checked) li.remove();
     });
     updateCount(containerId);
+    saveData();
   }
 
-  // starter items
-  ['Protein powder', 'Eggs', 'Rice', 'Chicken breast', 'Black coffee'].forEach(t => makeItem('shoppingList', t, false));
-  ['Morning workout', 'Deep work block', 'Read 20 pages', 'Plan tomorrow'].forEach(t => makeItem('todoList', t, false));
+  // load saved lists, or seed defaults on first-ever visit
+  const saved = loadData();
+  if (saved) {
+    saved.shoppingList.forEach(item => makeItem('shoppingList', item.text, item.checked));
+    saved.todoList.forEach(item => makeItem('todoList', item.text, item.checked));
+  } else {
+    ['Protein powder', 'Eggs', 'Rice', 'Chicken breast', 'Black coffee'].forEach(t => makeItem('shoppingList', t, false));
+    ['Morning workout', 'Deep work block', 'Read 20 pages', 'Plan tomorrow'].forEach(t => makeItem('todoList', t, false));
+    saveData();
+  }
 </script>
 </body>
 </html>
