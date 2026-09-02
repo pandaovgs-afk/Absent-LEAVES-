@@ -403,17 +403,21 @@
     { title:'Protect', sub:'Derma Co sunscreen — every morning, no skipping' }
   ];
 
-  function pmStepsFor(type){
+  function pmStepsFor(type, isMaskDay){
     if(type === 'active'){
       return [
         { title:'Cleanse', sub:'Minimalist 2% Salicylic Acid wash' },
         { title:'Moisturize', sub:'Foxtale Oil Balancing' }
       ];
     }
-    return [
-      { title:'Cleanse', sub:'Arencia Rice Mochi or Dove Men+Care' },
-      { title:'Moisturize', sub:'Foxtale Oil Balancing' }
+    const steps = [
+      { title:'Cleanse', sub:'Arencia Rice Mochi or Dove Men+Care' }
     ];
+    if(isMaskDay){
+      steps.push({ title:'Radiance mask', sub:'Foxtale Radiance Mask — 2x/week, rest nights' });
+    }
+    steps.push({ title:'Moisturize', sub:'Foxtale Oil Balancing' });
+    return steps;
   }
 
   function hairStepsFor(type, isDetoxDay){
@@ -465,7 +469,8 @@
   const hairType = hairDayType(today);
   const detoxToday = isHairDetoxDay(today);
 
-  const pmSteps = pmStepsFor(skinType);
+  const isMaskDay = (today.getDay() === 2 || today.getDay() === 6);
+  const pmSteps = pmStepsFor(skinType, isMaskDay);
   const hairSteps = hairStepsFor(hairType, detoxToday);
   const totalSteps = amSteps.length + pmSteps.length + hairSteps.length;
 
@@ -536,7 +541,7 @@
 
   async function saveState(){
     try{
-      await window.storage.set(todayKey, JSON.stringify(state), false);
+      localStorage.setItem(todayKey, JSON.stringify(state));
     }catch(e){ /* storage best-effort */ }
     renderWeekStrip();
   }
@@ -550,9 +555,9 @@
 
   async function loadState(){
     try{
-      const res = await window.storage.get(todayKey);
-      if(res && res.value){
-        const parsed = JSON.parse(res.value);
+      const raw = localStorage.getItem(todayKey);
+      if(raw){
+        const parsed = JSON.parse(raw);
         if(parsed && Array.isArray(parsed.am) && Array.isArray(parsed.pm)){
           state.am = parsed.am;
           state.pm = parsed.pm;
@@ -584,9 +589,9 @@
         fraction = dTotal ? dDone / dTotal : 0;
       } else {
         try{
-          const res = await window.storage.get(key);
-          if(res && res.value){
-            const parsed = JSON.parse(res.value);
+          const raw = localStorage.getItem(key);
+          if(raw){
+            const parsed = JSON.parse(raw);
             const hairArr = Array.isArray(parsed.hair) ? parsed.hair : [];
             const dTotal = (parsed.am ? parsed.am.length : 0) + (parsed.pm ? parsed.pm.length : 0) + hairArr.length;
             const dDone = (parsed.am ? parsed.am.filter(Boolean).length : 0) + (parsed.pm ? parsed.pm.filter(Boolean).length : 0) + hairArr.filter(Boolean).length;
